@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import Header from './Header'
+import Generos from './Generos'
+import EditarGenero from './EditarGenero'
+import NovoGenero from './NovoGenero'
+import axios from 'axios'
+import {
+  BrowserRouter as Router,
+  Route
+} from 'react-router-dom'
+
+const Home = () => {
+  return <h1>Home</h1>
+}
 
 function App() {
+  const [data, setData] = useState({}) // vazio
+  useEffect(() => { // dispara um efeito colateral quando app é chamado
+    axios.get('/api').then(res => {
+      setData(res.data)
+    })
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Router>
+      <div>
+        <Header />
+        <Route path='/' exact component={Home} />
+        <Route path='/genre/:id' exact component={EditarGenero} />
+        <Route path='/genre/new' exact component={NovoGenero} />   
+        <Route path='/genre' exact component={Generos} />   
+        
+      </div>
+    </Router>
+  )
 }
 
 export default App;
